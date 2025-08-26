@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 interface Post {
@@ -47,7 +47,11 @@ export class PostsController {
   }
 
   @Get(':id')
-  getPost(@Param('id') id: number): Post | undefined {
-    return posts.find((post) => post.id === +id);
+  getPost(@Param('id') id: number) {
+    const post = posts.find((post) => post.id === +id);
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+    return post;
   }
 }
