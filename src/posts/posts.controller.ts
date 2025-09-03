@@ -98,7 +98,7 @@ export class PostsController {
     if (title) post.title = title;
     if (content) post.content = content;
 
-    posts.map((prevPost) => (prevPost.id === +id ? post : prevPost));
+    posts = posts.map((prevPost) => (prevPost.id === +id ? post : prevPost));
 
     return posts;
   }
