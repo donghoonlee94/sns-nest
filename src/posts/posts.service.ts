@@ -51,26 +51,28 @@ export class PostsService {
     return posts;
   }
 
-  getPostById(id: number) {
-    const post = posts.find((post) => post.id === +id);
+  async getPostById(id: number) {
+    const post = await this.postsRepository.findOne({ where: { id } });
+
     if (!post) {
       throw new NotFoundException('Post not found');
     }
+
     return post;
   }
 
   createPost(author: string, title: string, content: string) {
-    const post = {
-      id: posts[posts.length - 1].id + 1,
+    // create : 객체 생성
+    // save : 데이터베이스에 저장
+
+    const post = this.postsRepository.create({
       author,
       title,
       content,
       likeCount: 0,
       commentCount: 0,
-    };
-
-    posts = [...posts, post];
-    return post;
+    });
+    return this.postsRepository.save(post);
   }
 
   updatePost(id: number, author?: string, title?: string, content?: string) {
